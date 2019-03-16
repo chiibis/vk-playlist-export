@@ -1,5 +1,5 @@
 function downloadM3UFile(filename, data) {
-    let blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+    let blob = new Blob([data], {type: "text/plain", endings: 'transparent'});
     saveAs(blob, filename + ".m3u");
 }
 
@@ -21,7 +21,7 @@ function getSongsInfoFromHtml() {
         let songObj = {
             performer: performerText,
             title: title,
-            length: durationInSeconds,
+            duration: durationInSeconds,
         };
 
         songsArr.push(songObj)
@@ -30,8 +30,26 @@ function getSongsInfoFromHtml() {
     return songsArr;
 }
 
-function convertSongsToM3U(songsArr) {
-    return JSON.stringify(songsArr)
+function convertSongsArrToM3U(songsArr) {
+
+    // We have to get smth like this in file
+    //
+    // #EXTM3U
+    // #EXTINF:260,Django Django - Reflections
+    // #EXTINF:214,Cold War Kids - Love Is Mystical
+
+    const NEW_LINE_SYM = '\r\n';
+    const M3U_SONG_PREFIX = '#EXTINF:';
+    const M3U_PLAYLIST_PREFIX = '#EXTM3U';
+
+    let resultText = M3U_PLAYLIST_PREFIX + NEW_LINE_SYM;
+
+    for (let song of songsArr) {
+        let resultSongLine = song.duration + ',' + song.performer + ' - ' + song.title;
+        resultText += M3U_SONG_PREFIX + resultSongLine + NEW_LINE_SYM;
+    }
+
+    return resultText
 }
 
 
@@ -39,10 +57,14 @@ function exportButtonClick() {
     // console.log('VK Extension:: exportButtonClick()');
 
     let songs = getSongsInfoFromHtml();
-    let blob = convertSongsToM3U(songs);
+    let blob = convertSongsArrToM3U(songs);
 
-    //todo: get id from page and pass it as filename
-    downloadM3UFile('debug_playlist', blob)
+    const userId = /\d+/.exec(window.location.href)[0];
+    const songsAmount = songs.length;
+
+    const filename = 'playlist_' + userId + '_' + songsAmount;
+
+    downloadM3UFile(filename, blob)
 }
 
 
@@ -61,5 +83,6 @@ function addExportIcon() {
 
 document.addEventListener('DOMContentLoaded',function(){
     // console.log('VK Extension:: DOM content loaded');
+
     addExportIcon();
 });
