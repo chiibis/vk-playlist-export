@@ -1,0 +1,28 @@
+{
+    "manifest_version": 2,
+
+    "name": "VK Playlist Export",
+    "description": "Export your music as m3u playlist from vk.com",
+    "version": "0.7",
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://vk.com/audios*"],
+            "css": ["css/style.css"],
+            "js": ["third_party/jquery-2.1.0.min.js", "content/audios_view.js"],
+            "run_at" :"document_start"
+        }
+    ],
+    "icons": {
+        "128": "playlist_icon_128.png",
+        "16": "images/playlist_icon_16.png"
+    },
+
+    "permissions": ["tabs","storage"],
+    "browser_action": {
+        "default_icon": "images/playlist_icon_16.png",
+        "default_title": "Export m3u from vk"
+    }
+}
