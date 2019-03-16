@@ -11,7 +11,7 @@
         {
             "matches": ["*://vk.com/audios*"],
             "css": ["css/style.css"],
-            "js": ["third_party/jquery-2.1.0.min.js", "content/audios_view.js"],
+            "js": ["third_party/jquery-2.1.0.min.js", "third_party/file_saver.js", "content/audios_view.js"],
             "run_at" :"document_start"
         }
     ],
@@ -19,7 +19,9 @@
         "128": "playlist_icon_128.png",
         "16": "images/playlist_icon_16.png"
     },
-
+    "web_accessible_resources": [
+        "images/*"
+    ],
     "permissions": ["tabs","storage"],
     "browser_action": {
         "default_icon": "images/playlist_icon_16.png",

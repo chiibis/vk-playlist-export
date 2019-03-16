@@ -1,0 +1,4 @@
+.audio_page__export_playlist_btn {
+    background-image: url('chrome-extension://__MSG_@@extension_id__/images/m3u-file-format.png');
+    background-size: 24px 24px;
+}
